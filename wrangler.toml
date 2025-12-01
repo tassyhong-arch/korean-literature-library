@@ -1,0 +1,8 @@
+name = "korean-lib"
+compatibility_date = "2024-12-01"
+pages_build_output_dir = ".vercel/output/static"
+
+# Cloudflare Pages 설정
+[env.production]
+compatibility_date = "2024-12-01"
+
