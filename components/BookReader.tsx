@@ -133,8 +133,27 @@ export default function BookReader({
 
   useEffect(() => {
     measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
+
+    let lastWidth = window.innerWidth;
+    let resizeTimer: NodeJS.Timeout;
+
+    const handleResize = () => {
+      // 모바일 주소표시줄 변경 무시: width가 변경된 경우만 재계산
+      const currentWidth = window.innerWidth;
+      if (Math.abs(currentWidth - lastWidth) > 5) {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          lastWidth = currentWidth;
+          measure();
+        }, 150);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(resizeTimer);
+    };
   }, [measure]);
 
   // Calculate column dimensions with memoization
